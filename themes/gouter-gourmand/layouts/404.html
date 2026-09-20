@@ -1,0 +1,15 @@
+{{ define "main" }}
+<section class="section section--cocoa">
+  <div class="wrap notfound">
+    <p class="notfound__code">404</p>
+    <h1 class="section-title" style="color:var(--on-dark)">
+      {{ i18n "nf_1" | default "Cette page a" }} <span class="it">{{ i18n "nf_2" | default "brûlé" }}</span>
+    </h1>
+    <p class="section__lede">{{ i18n "nf_lede" | default "Rien de grave, ça arrive aussi en cuisine. Reprenons depuis le début." }}</p>
+    <div class="hero__actions">
+      <a class="btn btn--cream" href="{{ .Site.Home.RelPermalink }}">{{ i18n "home" | default "Accueil" }}</a>
+      <a class="btn btn--berry" href="{{ relLangURL "blog/" }}">{{ i18n "all_articles" | default "Tous les articles" }}</a>
+    </div>
+  </div>
+</section>
+{{ end }}

@@ -1,0 +1,90 @@
+{{ define "main" }}
+{{- $author := index hugo.Data.authors (.Site.Params.site_author_key | default "marion-kieffer") -}}
+{{- $lang := .Site.Language.Lang -}}
+
+<article>
+  <header class="article-head">
+    <div class="wrap wrap--narrow">
+      <p class="breadcrumb">
+        <a href="{{ .Site.Home.RelPermalink }}">{{ i18n "home" | default "Accueil" }}</a>
+        {{ with .Params.categories }}
+          &rsaquo; {{ $c := index . 0 }}<a href="{{ (site.GetPage (printf "/categories/%s" (urlize $c))).RelPermalink }}">{{ $c }}</a>
+        {{ end }}
+      </p>
+      <h1 class="article-title">{{ .Title }}</h1>
+      {{ with .Description }}<p class="article-standfirst">{{ . }}</p>{{ end }}
+
+      <div class="byline">
+        {{ with $author.avatar }}
+          <img class="byline__avatar" src="{{ . }}" alt="" loading="lazy">
+        {{ else }}
+          <span class="byline__placeholder" aria-hidden="true">{{ substr $author.name 0 1 }}</span>
+        {{ end }}
+        <span>
+          {{ i18n "by" | default "Par" }} <strong>{{ $author.name }}</strong>
+          &middot; <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02.01.2006" }}</time>
+          &middot; {{ .ReadingTime }} {{ i18n "min_read" | default "min" }}
+        </span>
+      </div>
+    </div>
+  </header>
+
+  {{ with .Params.image }}
+  <div class="wrap">
+    <figure class="article-hero">
+      <img src="{{ . }}" alt="{{ $.Params.image_alt | default $.Title }}">
+    </figure>
+  </div>
+  {{ end }}
+
+  <div class="wrap wrap--narrow">
+    {{ if and (.Params.toc | default true) (gt (len .TableOfContents) 100) }}
+    <nav class="toc" aria-label="{{ i18n "toc" | default "Sommaire" }}">
+      <p class="toc__title">{{ i18n "toc" | default "Sommaire" }}</p>
+      {{ .TableOfContents }}
+    </nav>
+    {{ end }}
+
+    <div class="prose">
+      {{ .Content }}
+    </div>
+
+    {{ with .Params.tags }}
+    <div class="tag-row">
+      {{ range . }}<a class="tag" href="{{ (site.GetPage (printf "/tags/%s" (urlize .))).RelPermalink }}">{{ . }}</a>{{ end }}
+    </div>
+    {{ end }}
+  </div>
+</article>
+
+{{/* Maillage interne : la doctrine du parc impose au moins 3 liens par
+     article, ce bloc garantit le plancher même si le corps en manque. */}}
+{{ $related := .Site.RegularPages.Related . | first 3 }}
+{{ with $related }}
+<section class="section section--warm">
+  <div class="wrap">
+    <div class="section__head">
+      <h2 class="section-title">
+        {{ i18n "related_1" | default "À lire" }} <span class="it">{{ i18n "related_2" | default "ensuite" }}</span>
+      </h2>
+    </div>
+    <div class="card-grid">
+      {{ range . }}{{ partial "card.html" (dict "page" .) }}{{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+
+<section class="callout">
+  {{ partial "doodle.html" (dict "name" "coin" "class" "corner corner--tl") }}
+  {{ partial "doodle.html" (dict "name" "coin" "class" "corner corner--tr") }}
+  {{ partial "doodle.html" (dict "name" "coin" "class" "corner corner--bl") }}
+  {{ partial "doodle.html" (dict "name" "coin" "class" "corner corner--br") }}
+  <div class="wrap">
+    <h2 class="callout__title">{{ i18n "callout_title" | default "Un gâteau raté n'est pas <em>une fatalité</em>" | safeHTML }}</h2>
+    <div class="callout__actions">
+      <a class="btn btn--cream" href="{{ relLangURL "blog/" }}">{{ i18n "all_articles" | default "Tous les articles" }}</a>
+    </div>
+  </div>
+</section>
+{{ end }}

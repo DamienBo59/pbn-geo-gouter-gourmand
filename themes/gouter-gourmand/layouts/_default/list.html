@@ -1,0 +1,59 @@
+{{ define "main" }}
+{{- $pages := .Pages -}}
+{{- if .IsSection }}{{ $pages = .RegularPagesRecursive }}{{ end -}}
+{{- $paginator := .Paginate $pages -}}
+
+<section class="section section--cocoa section--tight">
+  <div class="wrap">
+    <p class="eyebrow eyebrow--dark">
+      {{ if eq .Kind "term" }}{{ i18n "section" | default "Rubrique" }}{{ else }}{{ i18n "archive" | default "Archives" }}{{ end }}
+    </p>
+    <h1 class="section-title section-title--left">{{ .Title }}</h1>
+    {{ with .Content }}<div class="section__lede" style="text-align:left;margin-left:0">{{ . }}</div>{{ end }}
+    {{ with .Description }}{{ if not $.Content }}<p class="section__lede" style="text-align:left;margin-left:0">{{ . }}</p>{{ end }}{{ end }}
+    <p class="section__lede" style="text-align:left;margin-left:0">
+      {{ len $pages }} {{ i18n "articles" | default "articles" }}
+    </p>
+  </div>
+</section>
+
+<section class="section section--warm">
+  <div class="wrap">
+    {{ with $paginator.Pages }}
+      <div class="card-grid">
+        {{ range $i, $p := . }}
+          {{ partial "card.html" (dict "page" $p "lead" (and (eq $i 0) (eq $paginator.PageNumber 1))) }}
+        {{ end }}
+      </div>
+    {{ else }}
+      <p>{{ i18n "no_article" | default "Rien ici pour l'instant." }}</p>
+    {{ end }}
+
+    {{ if gt $paginator.TotalPages 1 }}
+    <nav class="pagination" aria-label="Pagination">
+      {{ range $paginator.Pagers }}
+        {{ if eq . $paginator }}<span class="active">{{ .PageNumber }}</span>
+        {{ else }}<a href="{{ .URL }}">{{ .PageNumber }}</a>{{ end }}
+      {{ end }}
+    </nav>
+    {{ end }}
+  </div>
+</section>
+
+{{/* Passerelles vers les autres rubriques : utile au lecteur, et c'est le
+     maillage interne des archives voulu par la doctrine du parc. */}}
+{{ with .Site.Taxonomies.categories }}
+<section class="section section--cream section--tight">
+  <div class="wrap">
+    <p class="eyebrow">{{ i18n "keep_reading" | default "Continuer ailleurs" }}</p>
+    <div class="tag-row">
+      {{ range .ByCount }}
+        {{ if ne .Page.RelPermalink $.RelPermalink }}
+          <a class="tag" href="{{ .Page.RelPermalink }}">{{ .Page.Title }} ({{ .Count }})</a>
+        {{ end }}
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+{{ end }}

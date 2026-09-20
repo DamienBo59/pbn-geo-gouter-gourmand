@@ -1,0 +1,124 @@
+{{ define "main" }}
+{{- $author := index hugo.Data.authors (.Site.Params.site_author_key | default "marion-kieffer") -}}
+{{- $lang := .Site.Language.Lang -}}
+{{- $posts := where .Site.RegularPages "Section" "blog" -}}
+
+<section class="hero">
+  {{ partial "doodle.html" (dict "name" "cookie" "class" "doodle doodle--1") }}
+  {{ partial "doodle.html" (dict "name" "fouet" "class" "doodle doodle--2") }}
+  {{ partial "doodle.html" (dict "name" "cerise" "class" "doodle doodle--3") }}
+  {{ partial "doodle.html" (dict "name" "madeleine" "class" "doodle doodle--4") }}
+
+  <div class="wrap hero__inner">
+    <h1 class="hero__title">
+      {{ .Site.Title }}<br><span class="it">{{ .Site.Params.tagline }}</span>
+    </h1>
+    <p class="hero__lede">{{ .Params.lede | default .Site.Language.Params.description }}</p>
+    <div class="hero__actions">
+      <a class="btn btn--berry" href="{{ relLangURL "blog/" }}">{{ i18n "read_articles" | default "Lire les articles" }}</a>
+      <a class="btn btn--cream" href="{{ relLangURL "a-propos/" }}">{{ i18n "about_author" | default "Qui écrit ici" }}</a>
+    </div>
+  </div>
+
+  <p class="hero__meta">
+    {{ i18n "since" | default "Depuis" }} {{ .Site.Params.founding_year }}<br>
+    {{ len $posts }} {{ i18n "articles" | default "articles" }}
+  </p>
+</section>
+
+{{/* Bloc auteur : le même geste que le modèle, deux visuels inclinés qui se
+     chevauchent à gauche, la voix de l'auteur à droite. */}}
+<section class="section section--cream">
+  <div class="wrap author-block">
+    <div class="photo-stack">
+      {{ with $author.photos }}
+        {{ range first 2 . }}<img src="{{ . }}" alt="" loading="lazy">{{ end }}
+      {{ else }}
+        {{/* Tant qu'aucune photo n'existe, deux aplats tenus par un doodle
+             valent mieux qu'une banque d'images générique. */}}
+        <div class="photo-stack__fallback" style="position:absolute;width:62%;aspect-ratio:3/4;top:0;left:0;transform:rotate(-6deg);background:var(--cocoa);border-radius:var(--radius-lg);display:grid;place-items:center;color:var(--berry);box-shadow:var(--shadow-float)">
+          {{ partial "doodle.html" (dict "name" "part-de-tarte" "class" "doodle-inline") }}
+        </div>
+        <div class="photo-stack__fallback" style="position:absolute;width:58%;aspect-ratio:3/4;bottom:0;right:0;transform:rotate(5deg);background:var(--berry);border-radius:var(--radius-lg);display:grid;place-items:center;color:var(--vanilla);box-shadow:var(--shadow-float)">
+          {{ partial "doodle.html" (dict "name" "rouleau" "class" "doodle-inline") }}
+        </div>
+      {{ end }}
+    </div>
+
+    <div>
+      <h2 class="author-block__title">{{ i18n "hi_im" | default "Bonjour, moi c'est" }} {{ index (split $author.name " ") 0 }}</h2>
+      <p>{{ index $author.bio $lang | default $author.bio.fr }}</p>
+      {{ with $author.quote }}
+      <blockquote class="author-block__quote">“{{ index . $lang | default .fr }}”</blockquote>
+      {{ end }}
+      <p class="author-block__sign">{{ $author.name }}{{ with $author.role }} — {{ index . $lang | default .fr }}{{ end }}</p>
+    </div>
+  </div>
+</section>
+
+{{/* Derniers articles. Le premier passe en grand bloc, les autres en grille :
+     doctrine des archives du parc, un lecteur doit voir par où commencer. */}}
+{{ with $posts }}
+<section class="section section--warm">
+  <div class="wrap">
+    <div class="section__head">
+      <h2 class="section-title">
+        {{ i18n "latest_1" | default "Les derniers" }} <span class="it">{{ i18n "latest_2" | default "essais" }}</span>
+      </h2>
+    </div>
+    <div class="card-grid">
+      {{ range first 7 . }}
+        {{ partial "card.html" (dict "page" . "lead" (eq . (index $posts 0))) }}
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+
+{{/* Sommaire des rubriques, transposé de la carte du modèle : libellé,
+     pointillés, compteur en pilule. */}}
+{{ with .Site.Taxonomies.categories }}
+<section class="section section--cream">
+  <div class="wrap">
+    <div class="panel">
+      <h2 class="panel__title">
+        {{ partial "doodle.html" (dict "name" "logo" "class" "title-mark") }}{{ i18n "sections" | default "Rubriques" }}
+      </h2>
+      <div class="panel-grid">
+        <ul class="leaders">
+          {{ range $i, $t := .ByCount }}{{ if lt $i 3 }}
+            <li>
+              <a class="leaders__label" href="{{ $t.Page.RelPermalink }}">{{ $t.Page.Title }}</a>
+              <span class="leaders__fill"></span>
+              <span class="leaders__value">{{ $t.Count }} {{ i18n "articles" | default "articles" }}</span>
+            </li>
+          {{ end }}{{ end }}
+        </ul>
+        <ul class="leaders">
+          {{ range $i, $t := .ByCount }}{{ if ge $i 3 }}
+            <li>
+              <a class="leaders__label" href="{{ $t.Page.RelPermalink }}">{{ $t.Page.Title }}</a>
+              <span class="leaders__fill"></span>
+              <span class="leaders__value">{{ $t.Count }} {{ i18n "articles" | default "articles" }}</span>
+            </li>
+          {{ end }}{{ end }}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+{{ end }}
+
+<section class="callout">
+  {{ partial "doodle.html" (dict "name" "coin" "class" "corner corner--tl") }}
+  {{ partial "doodle.html" (dict "name" "coin" "class" "corner corner--tr") }}
+  {{ partial "doodle.html" (dict "name" "coin" "class" "corner corner--bl") }}
+  {{ partial "doodle.html" (dict "name" "coin" "class" "corner corner--br") }}
+  <div class="wrap">
+    <h2 class="callout__title">{{ i18n "callout_title" | default "Un gâteau raté n'est pas <em>une fatalité</em>" | safeHTML }}</h2>
+    <div class="callout__actions">
+      <a class="btn btn--cream" href="{{ relLangURL "blog/" }}">{{ i18n "read_articles" | default "Lire les articles" }}</a>
+    </div>
+  </div>
+</section>
+{{ end }}

@@ -1,0 +1,19 @@
+# {{ .Site.Title }}
+
+> {{ .Site.Language.Params.description }}
+
+{{ with .Site.Params.site_author_key }}{{ $a := index hugo.Data.authors . }}Auteur : {{ $a.name }}, {{ index $a.role $.Site.Language.Lang | default $a.role.fr }}. {{ index $a.bio $.Site.Language.Lang | default $a.bio.fr }}
+{{ end }}
+## Rubriques
+{{ range .Site.Taxonomies.categories.ByCount }}
+- [{{ .Page.Title }}]({{ .Page.Permalink }}) : {{ .Page.Description }}
+{{- end }}
+
+## Articles
+{{ range (where .Site.RegularPages "Section" "blog").ByDate.Reverse }}
+- [{{ .Title }}]({{ .Permalink }}){{ with .Description }} : {{ . }}{{ end }}
+{{- end }}
+
+## Pages
+{{ range where .Site.RegularPages "Section" "" }}{{ if not .Params.legal }}
+- [{{ .Title }}]({{ .Permalink }}){{ end }}{{ end }}

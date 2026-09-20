@@ -1,0 +1,79 @@
+{{- $title := "" -}}
+{{- if .IsHome -}}
+  {{- $title = printf "%s, %s" .Site.Title (.Site.Params.tagline | default "") | strings.TrimSuffix ", " -}}
+{{- else -}}
+  {{- $title = printf "%s | %s" .Title .Site.Title -}}
+{{- end -}}
+{{- $desc := .Description | default .Site.Params.description | default .Site.Language.Params.description -}}
+{{- $img := .Params.image | default .Site.Params.default_og_image -}}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ $title }}</title>
+<meta name="description" content="{{ $desc }}">
+{{ if .Params.noindex }}<meta name="robots" content="noindex, follow">{{ else }}<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">{{ end }}
+<link rel="canonical" href="{{ .Permalink }}">
+
+{{/* Alternates de langue : toujours émis, la paire FR/EN est la règle du parc. */}}
+{{ range .AllTranslations }}
+<link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}">
+{{ end }}
+{{ with .Site.Home }}<link rel="alternate" hreflang="x-default" href="{{ .Permalink }}">{{ end }}
+
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+<meta property="og:title" content="{{ $title }}">
+<meta property="og:description" content="{{ $desc }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:site_name" content="{{ .Site.Title }}">
+<meta property="og:locale" content="{{ replace (.Site.Language.Locale | default "fr-FR") "-" "_" }}">
+{{ with .Site.Params.og_locale_alternate }}<meta property="og:locale:alternate" content="{{ . }}">{{ end }}
+{{ with $img }}<meta property="og:image" content="{{ . | absURL }}">{{ end }}
+<meta name="twitter:card" content="summary_large_image">
+
+{{ if .IsPage }}
+<meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+{{ with .Lastmod }}<meta property="article:modified_time" content="{{ .Format "2006-01-02T15:04:05Z07:00" }}">{{ end }}
+{{ end }}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&display=swap">
+
+{{ with resources.Get "css/main.css" }}
+  {{ $css := . | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+{{ end }}
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+{{ with .Site.Home.OutputFormats.Get "RSS" }}<link rel="alternate" type="application/rss+xml" href="{{ .RelPermalink }}" title="{{ $.Site.Title }}">{{ end }}
+
+{{/* Données structurées. Un seul auteur pour tout le site, c'est la règle
+     du parc : une voix par blog. */}}
+{{- $author := index hugo.Data.authors (.Site.Params.site_author_key | default "marion-kieffer") -}}
+{{- $authorName := "" -}}{{- with $author }}{{ $authorName = .name }}{{ end -}}
+<script type="application/ld+json">
+{{- if .IsPage -}}
+{{ dict
+  "@context" "https://schema.org"
+  "@type" "Article"
+  "headline" .Title
+  "description" $desc
+  "datePublished" (.Date.Format "2006-01-02")
+  "dateModified" (.Lastmod.Format "2006-01-02")
+  "inLanguage" (.Site.Language.Locale | default "fr-FR")
+  "mainEntityOfPage" .Permalink
+  "author" (dict "@type" "Person" "name" $authorName "url" (printf "%sa-propos/" .Site.Home.Permalink))
+  "publisher" (dict "@type" "Organization" "name" .Site.Title "url" .Site.Home.Permalink)
+  | jsonify (dict "indent" "  ")
+}}
+{{- else -}}
+{{ dict
+  "@context" "https://schema.org"
+  "@type" "WebSite"
+  "name" .Site.Title
+  "url" .Site.Home.Permalink
+  "description" $desc
+  "inLanguage" (.Site.Language.Locale | default "fr-FR")
+  | jsonify (dict "indent" "  ")
+}}
+{{- end -}}
+</script>

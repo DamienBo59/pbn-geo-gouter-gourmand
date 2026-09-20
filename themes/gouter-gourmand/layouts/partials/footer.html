@@ -1,0 +1,66 @@
+{{- $site := .Site -}}
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-cols">
+
+      <div class="footer-col">
+        <span class="footer-col__label">{{ i18n "nav" | default "Navigation" }}</span>
+        <ul class="footer-col__list">
+          {{ range $site.Menus.main }}<li><a href="{{ .URL }}">{{ .Name }}</a></li>{{ end }}
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <span class="footer-col__label">{{ i18n "sections" | default "Rubriques" }}</span>
+        <ul class="footer-col__list">
+          {{ range first 6 $site.Taxonomies.categories.ByCount }}
+            <li><a href="{{ .Page.RelPermalink }}">{{ .Page.Title }}</a></li>
+          {{ end }}
+        </ul>
+      </div>
+
+      {{/* Le panneau blanc du pied de page reprend la carte du modèle :
+           un libellé, des pointillés, une valeur en pilule. */}}
+      <div class="panel" style="grid-column: span 2;">
+        <span class="footer-col__label">{{ i18n "the_rhythm" | default "Le rythme" }}</span>
+        <ul class="leaders" style="margin-top:1rem">
+          <li>
+            <span class="leaders__label">{{ i18n "published" | default "Articles publiés" }}</span>
+            <span class="leaders__fill"></span>
+            <span class="leaders__value">{{ len (where $site.RegularPages "Section" "blog") }}</span>
+          </li>
+          <li>
+            <span class="leaders__label">{{ i18n "new_posts" | default "Nouveautés" }}</span>
+            <span class="leaders__fill"></span>
+            <span class="leaders__value">{{ i18n "twice_a_week" | default "Mardi & vendredi" }}</span>
+          </li>
+          <li>
+            <span class="leaders__label">{{ i18n "written_by" | default "Écrit par" }}</span>
+            <span class="leaders__fill"></span>
+            <span class="leaders__value">{{ (index hugo.Data.authors ($site.Params.site_author_key | default "marion-kieffer")).name }}</span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="wordmark">{{ i18n "wordmark" | default "ON <em>RECOMMENCE</em>" | safeHTML }}</div>
+
+  <div class="wrap footer-legal">
+    <span>&copy; {{ now.Format "2006" }} {{ $site.Title }}</span>
+  </div>
+<!-- pbn-legal:start -->
+<div class="footer-legal">
+    <ul>
+        {{- $lg := .Site.Language.Lang }}
+        {{- $map := dict "fr" (slice (slice "mentions-legales/" "Mentions légales") (slice "politique-de-confidentialite/" "Politique de confidentialité") (slice "cgu/" "CGU")) "en" (slice (slice "legal-notice/" "Legal notice") (slice "privacy-policy/" "Privacy policy") (slice "terms-of-service/" "Terms of use")) }}
+        {{- $items := index $map $lg }}
+        {{- if not $items }}{{ $items = index $map "fr" }}{{ end }}
+        {{- range $items }}
+        <li><a href="{{ (index . 0) | relLangURL }}">{{ index . 1 }}</a></li>
+        {{- end }}
+    </ul>
+</div>
+<!-- pbn-legal:end -->
+</footer>

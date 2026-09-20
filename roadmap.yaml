@@ -1,0 +1,384 @@
+# Roadmap editoriale evergreen — skill /create-article-auto
+#
+# Ce fichier alimente la skill /create-article-auto (publication automatique
+# d'articles evergreen SEO, bilingue FR + EN).
+#
+# EMPLACEMENT
+# -----------
+# Ce fichier doit vivre **a la racine du repo du blog** (et PAS dans .claude/).
+# Raison : les fichiers dans .claude/ sont traites comme sensibles par Claude Code
+# et declenchent un popup a chaque edit, non contournable, qui bloquerait les
+# runs cron de nuit.
+#
+# FONCTIONNEMENT
+# --------------
+# A chaque execution (planifiee via /schedule ou manuelle), l'agent :
+#   1. Filtre les entrees avec status: todo et scheduled_date <= today
+#   2. Prend la plus ancienne
+#   3. Analyse la SERP sur le kw (SerpAPI via curl direct sur l'API publique ;
+#      pas de fetch des pages concurrentes, le sandbox cloud les bloque en 503)
+#   4. Genere l'article FR + EN en full auto (Sonnet 4.6 par defaut)
+#   5. Publie sur GitHub (push main direct, GitHub Actions deploie)
+#   6. Met a jour l'entree ci-dessous : status: done, published_date, URLs
+#
+# En cas de blocage (SERP indispo, image KO, build KO, push rejete 3x) :
+#   - status passe a failed
+#   - error est rempli avec le message
+#   - l'entree n'est PAS retentee automatiquement (intervention humaine requise)
+#
+# COMMENT AJOUTER UNE ENTREE (humain)
+# -----------------------------------
+# 1. Copier le bloc "exemple" ci-dessous a la fin de la liste `articles`
+# 2. Renseigner : kw, category (doit matcher hugo.toml), scheduled_date
+# 3. Renseigner volume et kd (optionnels, juste pour prioriser)
+# 4. Laisser les autres champs a null (remplis par l'agent)
+# 5. Commit + push. La prochaine execution cron eligible prendra l'entree
+#
+# DEBLOQUER UNE ENTREE FAILED
+# ---------------------------
+# 1. Lire le message dans `error:` pour comprendre la cause
+# 2. Corriger si besoin (kw trop concurrentiel, category invalide, etc.)
+# 3. Repasser `status: todo` et vider `error: null`
+# 4. Commit + push, l'agent reprendra l'entree au prochain run
+#
+# CHAMPS EDITABLES PAR L'HUMAIN
+# -----------------------------
+#   kw              (obligatoire) Mot-cle principal SEO cible. Langue principale du blog.
+#   category        (obligatoire) Categorie du blog. Doit matcher une categorie definie
+#                                 dans le hugo.toml (en langue principale).
+#   volume          (informatif)  Volume mensuel de recherche. Aide l'humain a prioriser,
+#                                 ignore par l'agent. Laisser null si inconnu.
+#   kd              (informatif)  Keyword Difficulty 0-100. Aide l'humain a doser l'ambition,
+#                                 ignore par l'agent. Laisser null si inconnu.
+#   scheduled_date  (obligatoire) Date a partir de laquelle l'agent peut publier.
+#                                 Format : YYYY-MM-DD.
+#   status          todo | done | failed. Passer un failed en todo apres correction
+#                                 manuelle pour relancer.
+#
+# CHAMPS REMPLIS PAR L'AGENT (ne pas toucher sauf pour debloquer un failed)
+# -----------------------------------------------------------------------
+#   published_date    YYYY-MM-DD reel de publication
+#   published_url_fr  URL complete de la version FR
+#   published_url_en  URL complete de la version EN
+#   error             message d'erreur si status: failed
+#
+# AJOUT D'UNE NOUVELLE ENTREE
+# ---------------------------
+# Copier le bloc "exemple" ci-dessous, remplir kw, category, scheduled_date,
+# laisser les autres champs tels quels.
+#
+# BONNES PRATIQUES
+# ----------------
+# - Espacer les scheduled_date selon la frequence de publication du blog
+#   (ex: 2x/semaine = mardi et vendredi).
+# - Eviter 2 KW cannibalisants dans des dates rapprochees.
+# - Verifier que la category existe bien dans hugo.toml avant d'ajouter.
+# - Eviter les KW trop concurrentiels pour un blog qui demarre (preferer la
+#   longue traine).
+#
+# REGLE DE DIVERSITE DES CATEGORIES (obligatoire)
+# -----------------------------------------------
+# L'ordre chronologique de publication doit alterner les categories pour
+# proposer un flux varie aux lecteurs et aux moteurs.
+#
+# Contraintes :
+#   1. JAMAIS 2 articles consecutifs (par scheduled_date) de la meme categorie.
+#   2. Sur toute fenetre glissante de 5 articles consecutifs, au moins
+#      3 categories distinctes doivent etre representees.
+#   3. Si le blog n'a pas assez de categories pour respecter la regle
+#      (cas extreme : 2 categories), appliquer l'alternance stricte 1 sur 2.
+#
+# Cette regle s'applique a la creation de la roadmap et a chaque ajout
+# d'entree. Si tu remplis a la main, trie par categorie et entrelace.
+# Si tu utilises /create-article-seo, la skill doit valider et reordonner
+# automatiquement les scheduled_date pour respecter la contrainte.
+
+
+# ==========================================================================
+# ROADMAP RECONSTRUITE LE 2026-09-12 SUR LE CORPUS DE SEPTEMBRE
+# --------------------------------------------------------------------------
+# L'ancienne roadmap (49 entrees) etait batie sur le corpus d'aout, soit
+# 87 mots-cles. Le corpus de septembre en compte 1 906, dont 632 en longue
+# traine reellement ciblable. Elle est donc remplacee, pas completee.
+#
+# Filtres appliques au corpus (voir la fiche mots-cles 2026-09 du Drive) :
+#   - 3 mots ou plus, volume entre 150 et 3 000, KGR < 0,6 quand il existe
+#   - frontiere gouter-gourmand.fr respectee : gateaux, cookies, tartes et
+#     galette des rois laisses a P02. Brioche et pain perdu restent ici
+#   - requetes produit a SERP tenue par les marques ecartees en frontal
+#     (granola, muesli, flocons d'avoine, graines de chia en requete nue)
+#   - local, marques, materiel et transactionnel retires
+#   - garde-fou cannibalisation passe contre les 9 articles publies, les
+#     49 entrees de l'ancienne roadmap et les 60 entrees entre elles
+#
+# Controles passes : 0 couple cannibalisant, 0 paire consecutive de meme
+# categorie, au moins 3 categories sur toute fenetre de 5 articles.
+#
+# 60 entrees, 12 par rubrique, 72 006 de volume mensuel cible,
+# du 2026-09-12 au 2027-03-23, cadence mardi et vendredi.
+# ==========================================================================
+
+articles:
+  - kw: "brownie sans beurre"
+    category: "Faire sans"
+    volume: 1727
+    kd: null
+    scheduled_date: "2026-09-22"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+
+  - kw: "ganache montée chocolat"
+    category: "Crèmes et techniques"
+    volume: 9000
+    kd: null
+    scheduled_date: "2026-09-25"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+
+  - kw: "cookie americain recette"
+    category: "Petits goûters"
+    volume: 10571
+    kd: null
+    scheduled_date: "2026-09-29"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+
+  - kw: "gateau au chocolat moelleux"
+    category: "Gâteaux et cakes"
+    volume: 13240
+    kd: null
+    scheduled_date: "2026-10-02"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+
+  - kw: "véritable recette flan pâtissier"
+    category: "Tartes et classiques"
+    volume: 14600
+    kd: null
+    scheduled_date: "2026-10-06"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+
+  - kw: "gateau chocolat sans sucre"
+    category: "Faire sans"
+    volume: 2636
+    kd: null
+    scheduled_date: "2026-10-09"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+
+  - kw: "mascarpone en chantilly"
+    category: "Crèmes et techniques"
+    volume: 22583
+    kd: null
+    scheduled_date: "2026-10-13"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+
+  - kw: "recette facile madeleine"
+    category: "Petits goûters"
+    volume: 5077
+    kd: null
+    scheduled_date: "2026-10-16"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+
+  - kw: "cake a la banane"
+    category: "Gâteaux et cakes"
+    volume: 13455
+    kd: null
+    scheduled_date: "2026-10-20"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+
+  - kw: "tarte fraise mascarpone"
+    category: "Tartes et classiques"
+    volume: 4000
+    kd: null
+    scheduled_date: "2026-10-23"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+
+  - kw: "cookies sans sucre roux"
+    category: "Faire sans"
+    volume: 436
+    kd: null
+    scheduled_date: "2026-10-27"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+
+  - kw: "creme patissiere au chocolat"
+    category: "Crèmes et techniques"
+    volume: 4500
+    kd: null
+    scheduled_date: "2026-10-30"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+
+  - kw: "mug cake cookie"
+    category: "Petits goûters"
+    volume: 7364
+    kd: null
+    scheduled_date: "2026-11-03"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+
+  - kw: "cake au citron"
+    category: "Gâteaux et cakes"
+    volume: 30100
+    kd: null
+    scheduled_date: "2026-11-06"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+
+  - kw: "tarte praline"
+    category: "Tartes et classiques"
+    volume: 3667
+    kd: null
+    scheduled_date: "2026-11-10"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+
+  - kw: "conservation banana bread"
+    category: "Faire sans"
+    volume: 400
+    kd: null
+    scheduled_date: "2026-11-13"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+
+  - kw: "meringue suisse"
+    category: "Crèmes et techniques"
+    volume: 4600
+    kd: null
+    scheduled_date: "2026-11-17"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+
+  - kw: "financier aux amandes"
+    category: "Petits goûters"
+    volume: 9000
+    kd: null
+    scheduled_date: "2026-11-20"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+
+  - kw: "gateau chocolat courgette"
+    category: "Gâteaux et cakes"
+    volume: 12333
+    kd: null
+    scheduled_date: "2026-11-24"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+
+  - kw: "recette mousse au chocolat à l'ancienne"
+    category: "Tartes et classiques"
+    volume: 13500
+    kd: null
+    scheduled_date: "2026-11-27"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+
+  - kw: "glacage citron"
+    category: "Crèmes et techniques"
+    volume: 4000
+    kd: null
+    scheduled_date: "2026-12-01"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+
+  - kw: "recette pate a cookie cru"
+    category: "Petits goûters"
+    volume: 5600
+    kd: null
+    scheduled_date: "2026-12-04"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+
+  - kw: "recette gateau yaourt facile"
+    category: "Gâteaux et cakes"
+    volume: 11000
+    kd: null
+    scheduled_date: "2026-12-08"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+
+  - kw: "pate feuilletee recette"
+    category: "Tartes et classiques"
+    volume: 13792
+    kd: null
+    scheduled_date: "2026-12-11"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null

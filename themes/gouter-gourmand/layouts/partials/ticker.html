@@ -1,0 +1,16 @@
+{{- $items := .Site.Language.Params.ticker | default .Site.Params.ticker -}}
+{{- with $items }}
+<div class="ticker">
+  {{/* La piste est doublée : l'animation translate de -50%, il faut donc
+       exactement deux exemplaires pour que la boucle soit invisible. Le
+       second est masqué aux lecteurs d'écran pour ne pas répéter le texte. */}}
+  <div class="ticker__track">
+    <div style="display:flex">
+      {{ range . }}<span class="ticker__item">{{ . }}</span>{{ end }}
+    </div>
+    <div style="display:flex" aria-hidden="true">
+      {{ range . }}<span class="ticker__item">{{ . }}</span>{{ end }}
+    </div>
+  </div>
+</div>
+{{- end }}

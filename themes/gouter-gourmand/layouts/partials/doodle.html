@@ -1,0 +1,68 @@
+{{/*
+  Illustrations au trait du site. Toutes suivent la même règle : aucun
+  remplissage, un seul trait de 4 unités sur une grille de 100, bouts et
+  angles arrondis. Elles héritent de la couleur du parent (currentColor),
+  ce qui permet de les poser aussi bien sur le chocolat que sur la framboise.
+
+  Usage : {{ partial "doodle.html" (dict "name" "cookie" "class" "doodle doodle--1") }}
+*/}}
+{{- $name := .name -}}
+{{- $class := .class | default "doodle" -}}
+<span class="{{ $class }}" aria-hidden="true">
+<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+{{- if eq $name "cookie" -}}
+  <circle cx="50" cy="50" r="34"/>
+  <circle cx="40" cy="40" r="4.5"/>
+  <circle cx="61" cy="45" r="4"/>
+  <circle cx="47" cy="62" r="4.5"/>
+  <circle cx="64" cy="64" r="3"/>
+{{- else if eq $name "part-de-tarte" -}}
+  <path d="M14 70 L50 20 L86 70 Z"/>
+  <path d="M22 62 h56"/>
+  <path d="M40 46 c4 -5 8 -5 12 0 c4 5 8 5 12 0"/>
+{{- else if eq $name "madeleine" -}}
+  <path d="M18 58 c0 -22 14 -34 32 -34 s32 12 32 34 c0 10 -14 16 -32 16 s-32 -6 -32 -16 Z"/>
+  <path d="M34 72 c2 -16 6 -30 16 -44"/>
+  <path d="M50 74 c0 -18 2 -32 8 -46"/>
+  <path d="M64 70 c-2 -14 -2 -26 2 -36"/>
+{{- else if eq $name "fouet" -}}
+  <path d="M62 18 L44 40"/>
+  <path d="M66 22 L48 44"/>
+  <path d="M44 40 c-12 10 -16 24 -10 32 c8 8 22 4 32 -8 c8 -10 10 -20 4 -26 c-6 -6 -16 -6 -26 2 Z"/>
+  <path d="M44 44 c-6 14 -4 26 4 32"/>
+  <path d="M56 44 c-4 16 -2 26 6 30"/>
+{{- else if eq $name "cupcake" -}}
+  <path d="M28 48 h44 l-6 32 h-32 Z"/>
+  <path d="M30 48 c-2 -12 8 -18 14 -14 c2 -10 16 -12 20 -2 c10 -2 14 10 8 16"/>
+  <path d="M50 20 v8"/>
+{{- else if eq $name "cerise" -}}
+  <circle cx="36" cy="68" r="13"/>
+  <circle cx="66" cy="72" r="11"/>
+  <path d="M36 55 c2 -20 12 -30 26 -34"/>
+  <path d="M66 61 c-2 -16 -2 -28 -4 -40"/>
+  <path d="M62 21 c8 -4 16 -2 20 4 c-8 4 -16 2 -20 -4 Z"/>
+{{- else if eq $name "rouleau" -}}
+  <rect x="24" y="40" width="52" height="20" rx="10"/>
+  <path d="M24 50 h-12"/>
+  <path d="M76 50 h12"/>
+  <path d="M12 44 v12"/>
+  <path d="M88 44 v12"/>
+{{- else if eq $name "coeur" -}}
+  <path d="M50 78 C24 60 16 46 22 34 c5 -10 19 -11 28 1 c9 -12 23 -11 28 -1 c6 12 -2 26 -28 44 Z"/>
+{{- else if eq $name "logo" -}}
+  {{/* Marque du site : une part de tarte dont la pointe file vers le bas. */}}
+  <path d="M20 34 L50 14 L80 34 L50 90 Z"/>
+  <path d="M28 40 h44"/>
+  <circle cx="42" cy="52" r="3.5"/>
+  <circle cx="58" cy="56" r="3"/>
+  <circle cx="50" cy="68" r="3"/>
+{{- else if eq $name "coin" -}}
+  {{/* Ornement d'angle des bandes pleines. */}}
+  <path d="M6 6 h34"/>
+  <path d="M6 6 v34"/>
+  <path d="M14 16 c10 2 18 8 22 18"/>
+  <path d="M16 30 c8 -2 14 0 18 4"/>
+  <path d="M30 14 c-2 8 0 14 4 18"/>
+{{- end -}}
+</svg>
+</span>

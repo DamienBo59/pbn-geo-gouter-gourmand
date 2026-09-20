@@ -1,0 +1,24 @@
+<header class="masthead">
+  <div class="wrap masthead__inner">
+    <a class="brand" href="{{ .Site.Home.RelPermalink }}">
+      {{ partial "doodle.html" (dict "name" "logo" "class" "brand__mark") }}
+      <span class="brand__name">{{ with split .Site.Title " " }}{{ index . 0 }} <em>{{ delimit (after 1 .) " " }}</em>{{ end }}</span>
+    </a>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      {{ i18n "menu" | default "Menu" }}
+    </button>
+
+    <nav class="nav" id="site-nav" aria-label="{{ i18n "main_nav" | default "Navigation principale" }}">
+      {{ $current := . }}
+      {{ range .Site.Menus.main }}
+        <a class="nav__link" href="{{ .URL }}"{{ if $current.IsMenuCurrent "main" . }} aria-current="page"{{ end }}>{{ .Name }}</a>
+      {{ end }}
+      <span class="lang-switch">
+        {{ range .AllTranslations }}
+          <a href="{{ .RelPermalink }}" hreflang="{{ .Language.Lang }}">{{ .Language.Lang | upper }}</a>
+        {{ end }}
+      </span>
+    </nav>
+  </div>
+</header>
