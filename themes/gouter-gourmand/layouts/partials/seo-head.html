@@ -63,7 +63,7 @@
   "mainEntityOfPage" .Permalink
   "author" (dict "@type" "Person" "name" $authorName "url" (printf "%sa-propos/" .Site.Home.Permalink))
   "publisher" (dict "@type" "Organization" "name" .Site.Title "url" .Site.Home.Permalink)
-  | jsonify (dict "indent" "  ")
+  | jsonify (dict "indent" "  ") | safeJS
 }}
 {{- else -}}
 {{ dict
@@ -73,7 +73,7 @@
   "url" .Site.Home.Permalink
   "description" $desc
   "inLanguage" (.Site.Language.Locale | default "fr-FR")
-  | jsonify (dict "indent" "  ")
+  | jsonify (dict "indent" "  ") | safeJS
 }}
 {{- end -}}
 </script>
