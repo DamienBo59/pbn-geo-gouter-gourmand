@@ -6,7 +6,8 @@ lastmod: 2026-09-20T11:00:00+02:00
 categories: ["Petits goûters"]
 tags: ["sans gluten", "cookies", "farine", "repos"]
 author: marion-kieffer
-image: ""
+image: "/images/blog/cookies-sans-gluten.webp"
+image_alt: "Biscuits sablés empilés sur un linge de cuisine"
 toc: true
 translationKey: gluten-free-cookies
 ---

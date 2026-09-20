@@ -6,7 +6,8 @@ lastmod: 2026-09-20T14:00:00+02:00
 categories: ["Crèmes et techniques"]
 tags: ["glaçage", "sans sucre glace", "sans oeuf", "technique"]
 author: marion-kieffer
-image: ""
+image: "/images/blog/glacage-sans-sucre-glace.webp"
+image_alt: "Gâteau nappé d'un glaçage blanc, posé sur une grille"
 toc: true
 translationKey: icing-without-icing-sugar
 ---

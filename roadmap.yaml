@@ -124,10 +124,10 @@ articles:
     volume: 1727
     kd: null
     scheduled_date: "2026-09-22"
-    status: todo
-    published_date: null
-    published_url_fr: null
-    published_url_en: null
+    status: done
+    published_date: "2026-09-20"
+    published_url_fr: "https://www.gouter-gourmand.fr/blog/brownie-sans-beurre/"
+    published_url_en: "https://www.gouter-gourmand.fr/en/blog/brownie-without-butter/"
     error: null
 
   - kw: "ganache montée chocolat"
@@ -135,10 +135,10 @@ articles:
     volume: 9000
     kd: null
     scheduled_date: "2026-09-25"
-    status: todo
-    published_date: null
-    published_url_fr: null
-    published_url_en: null
+    status: done
+    published_date: "2026-09-22"
+    published_url_fr: "https://www.gouter-gourmand.fr/blog/ganache-montee-chocolat/"
+    published_url_en: "https://www.gouter-gourmand.fr/en/blog/whipped-chocolate-ganache/"
     error: null
 
   - kw: "cookie americain recette"
@@ -146,10 +146,10 @@ articles:
     volume: 10571
     kd: null
     scheduled_date: "2026-09-29"
-    status: todo
-    published_date: null
-    published_url_fr: null
-    published_url_en: null
+    status: done
+    published_date: "2026-09-25"
+    published_url_fr: "https://www.gouter-gourmand.fr/blog/cookie-americain/"
+    published_url_en: "https://www.gouter-gourmand.fr/en/blog/american-cookies/"
     error: null
 
   - kw: "gateau au chocolat moelleux"
@@ -157,10 +157,10 @@ articles:
     volume: 13240
     kd: null
     scheduled_date: "2026-10-02"
-    status: todo
-    published_date: null
-    published_url_fr: null
-    published_url_en: null
+    status: done
+    published_date: "2026-09-29"
+    published_url_fr: "https://www.gouter-gourmand.fr/blog/gateau-chocolat-moelleux/"
+    published_url_en: "https://www.gouter-gourmand.fr/en/blog/moist-chocolate-cake/"
     error: null
 
   - kw: "véritable recette flan pâtissier"
@@ -168,10 +168,10 @@ articles:
     volume: 14600
     kd: null
     scheduled_date: "2026-10-06"
-    status: todo
-    published_date: null
-    published_url_fr: null
-    published_url_en: null
+    status: done
+    published_date: "2026-10-02"
+    published_url_fr: "https://www.gouter-gourmand.fr/blog/flan-patissier/"
+    published_url_en: "https://www.gouter-gourmand.fr/en/blog/french-custard-tart/"
     error: null
 
   - kw: "gateau chocolat sans sucre"

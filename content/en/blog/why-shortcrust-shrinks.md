@@ -6,7 +6,8 @@ lastmod: 2026-09-20T15:00:00+02:00
 categories: ["Tarts and classics"]
 tags: ["shortcrust", "tart", "resting", "blind baking", "failure"]
 author: marion-kieffer
-image: ""
+image: "/images/blog/pate-sablee-se-retracte.webp"
+image_alt: "Hands rolling out pastry dough on a work surface"
 toc: true
 translationKey: why-shortcrust-shrinks
 ---

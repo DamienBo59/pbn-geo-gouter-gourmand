@@ -6,7 +6,8 @@ lastmod: 2026-09-20T10:00:00+02:00
 categories: ["Cakes and loaves"]
 tags: ["no bake", "chocolate", "no oven", "biscuit base", "fridge"]
 author: marion-kieffer
-image: ""
+image: "/images/blog/gateau-chocolat-sans-cuisson.webp"
+image_alt: "Slices of no-bake chocolate cake with a chocolate topping"
 toc: true
 translationKey: no-bake-chocolate-cake
 ---

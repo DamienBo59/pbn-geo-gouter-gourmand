@@ -6,7 +6,8 @@ lastmod: 2026-09-20T09:00:00+02:00
 categories: ["Baking without"]
 tags: ["no oven", "cake", "frying pan", "microwave", "no bake"]
 author: marion-kieffer
-image: ""
+image: "/images/blog/gateau-sans-four.webp"
+image_alt: "Layered chocolate and cream cake, cut into portions"
 toc: true
 translationKey: cake-without-oven
 ---

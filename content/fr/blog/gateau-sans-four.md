@@ -6,7 +6,8 @@ lastmod: 2026-09-20T09:00:00+02:00
 categories: ["Faire sans"]
 tags: ["sans four", "gâteau", "poêle", "micro-ondes", "sans cuisson"]
 author: marion-kieffer
-image: ""
+image: "/images/blog/gateau-sans-four.webp"
+image_alt: "Gâteau étagé au chocolat et à la crème, coupé en parts"
 toc: true
 translationKey: cake-without-oven
 ---

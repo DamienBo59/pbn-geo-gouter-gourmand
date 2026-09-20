@@ -6,7 +6,8 @@ lastmod: 2026-09-20T10:00:00+02:00
 categories: ["Gâteaux et cakes"]
 tags: ["sans cuisson", "chocolat", "sans four", "petit beurre", "réfrigérateur"]
 author: marion-kieffer
-image: ""
+image: "/images/blog/gateau-chocolat-sans-cuisson.webp"
+image_alt: "Parts de gâteau au chocolat nappées, sans cuisson"
 toc: true
 translationKey: no-bake-chocolate-cake
 ---

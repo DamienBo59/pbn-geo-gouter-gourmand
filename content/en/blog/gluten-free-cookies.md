@@ -6,7 +6,8 @@ lastmod: 2026-09-20T11:00:00+02:00
 categories: ["Small bakes"]
 tags: ["gluten free", "cookies", "flour", "resting"]
 author: marion-kieffer
-image: ""
+image: "/images/blog/cookies-sans-gluten.webp"
+image_alt: "Stacked shortbread-style biscuits on a kitchen cloth"
 toc: true
 translationKey: gluten-free-cookies
 ---

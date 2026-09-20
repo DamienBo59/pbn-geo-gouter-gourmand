@@ -6,7 +6,8 @@ lastmod: 2026-09-20T15:00:00+02:00
 categories: ["Tartes et classiques"]
 tags: ["pâte sablée", "tarte", "repos", "cuisson à blanc", "ratage"]
 author: marion-kieffer
-image: ""
+image: "/images/blog/pate-sablee-se-retracte.webp"
+image_alt: "Mains étalant une pâte au rouleau sur un plan de travail"
 toc: true
 translationKey: why-shortcrust-shrinks
 ---

@@ -6,7 +6,8 @@ lastmod: 2026-09-20T14:00:00+02:00
 categories: ["Creams and technique"]
 tags: ["icing", "no icing sugar", "egg free", "technique"]
 author: marion-kieffer
-image: ""
+image: "/images/blog/glacage-sans-sucre-glace.webp"
+image_alt: "Cake covered with a white icing, resting on a rack"
 toc: true
 translationKey: icing-without-icing-sugar
 ---
