@@ -209,7 +209,7 @@ h1, h2, h3, h4 {
   transition: color .18s ease;
 }
 /* La virgule séparatrice est purement décorative, relevée sur le modèle. */
-.nav__link:not(:last-child)::after {
+.nav__link:not(:last-of-type)::after {
   content: ",";
   margin-right: .55rem;
   color: var(--berry);
@@ -261,7 +261,7 @@ h1, h2, h3, h4 {
   }
   .nav.is-open { display: flex; }
   .nav__link { font-size: 1rem; }
-  .nav__link:not(:last-child)::after { content: none; }
+  .nav__link:not(:last-of-type)::after { content: none; }
   .masthead__inner { flex-wrap: wrap; }
   .lang-switch { margin-left: 0; }
 }
@@ -366,7 +366,10 @@ h1, h2, h3, h4 {
 .doodle--4 { width: clamp(64px, 9vw, 124px); bottom: 18%; right: 15%; transform: rotate(-11deg); }
 @media (max-width: 700px) {
   .doodle--3, .doodle--4 { display: none; }
-  .doodle { opacity: .5; }
+  .doodle { opacity: .45; }
+  /* Degages du titre : un en haut a gauche, un en bas a droite. */
+  .doodle--1 { top: 4%; left: 4%; width: 54px; }
+  .doodle--2 { top: auto; bottom: 4%; right: 5%; width: 58px; }
 }
 
 /* ---------- 7. Titres de section ---------- */
